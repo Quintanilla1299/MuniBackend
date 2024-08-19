@@ -13,6 +13,12 @@ export const attractionSchema = z.object({
     .optional(),
   location: z.string().min(1, 'Location is required').max(255, 'Location must be less than 255 characters'),
   opening_hours: z.string().max(100, 'Opening hours must be less than 100 characters').optional(),
+  latitude: z.number()
+    .min(-90, 'Latitude must be greater than or equal to -90')
+    .max(90, 'Latitude must be less than or equal to 90'),
+  longitude: z.number()
+    .min(-180, 'Longitude must be greater than or equal to -180')
+    .max(180, 'Longitude must be less than or equal to 180'),
   contacts: z.array(
     z.object({
       contact_type: z.string(),

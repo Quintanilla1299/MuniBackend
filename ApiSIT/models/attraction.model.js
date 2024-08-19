@@ -35,8 +35,15 @@ Attraction.init({
   },
   opening_hours: {
     type: DataTypes.STRING(100)
+  },
+  latitude: {
+    type: DataTypes.DOUBLE,
+    allowNull: false
+  },
+  longitude: {
+    type: DataTypes.DOUBLE,
+    allowNull: false
   }
-
 },
 {
   sequelize,

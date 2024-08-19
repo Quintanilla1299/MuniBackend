@@ -1,17 +1,12 @@
 import { Router } from 'express'
 import userController from '../controllers/user.controller.js'
-import { authMiddleware } from '../auth.js'
 
 export const userRouter = Router()
 
-userRouter.post('/login', userController.login)
+userRouter.get('/listar', userController.findAll)
 
-userRouter.post('/agregar', userController.create)
+userRouter.get('/buscar/:id', userController.findOne)
 
-userRouter.get('/listar', authMiddleware, userController.findAll)
+userRouter.put('/actualizar/:id', userController.update)
 
-userRouter.get('/buscar/:id', authMiddleware, userController.findOne)
-
-userRouter.put('/actualizar/:id', authMiddleware, userController.update)
-
-userRouter.delete('/eliminar/:id', authMiddleware, userController.delete)
+userRouter.delete('/eliminar/:id', userController.delete)

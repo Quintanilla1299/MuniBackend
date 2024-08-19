@@ -25,7 +25,7 @@ class UserController {
       }
 
       const claims = { sub: user.user_id, email: user.email, name: user.username }
-      const token = jwt.sign(claims, secret, { expiresIn: '1h' })
+      const token = jwt.sign(claims, secret, { expiresIn: '1d' })
       res.json({ token, user })
     } catch (error) {
       console.error('Login error:', error)
