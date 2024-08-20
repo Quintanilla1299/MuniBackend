@@ -28,6 +28,7 @@ Person.init({
   cedula: {
     type: DataTypes.STRING(20),
     allowNull: false,
+    unique: true,
     validate: {
       // Validación de cédula costarricense y extranjera
       isValidCedula (value) {

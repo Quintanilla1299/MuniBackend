@@ -86,7 +86,8 @@ class UserController {
           { email: identifier },
           { username: identifier }
         ]
-      }
+      },
+      include: [Person]
     })
   }
 

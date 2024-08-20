@@ -34,7 +34,7 @@ Contact.init({
         if (this.contact_type === 'email' && !/^\S+@\S+\.\S+$/.test(value)) {
           throw new Error('Invalid email format')
         }
-        if (this.contact_type === 'phone' && !/^[0-9\-() ]+$/.test(value)) {
+        if (this.contact_type === 'phone' && !/^[0-9\-()+ ]+$/.test(value)) {
           throw new Error('Invalid phone number format')
         }
       }
