@@ -43,6 +43,19 @@ Attraction.init({
   longitude: {
     type: DataTypes.DOUBLE,
     allowNull: false
+  },
+  remarks: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  },
+  services: {
+    type: DataTypes.STRING(255)
+  },
+  owner: {
+    type: DataTypes.STRING(100)
+  },
+  community: {
+    type: DataTypes.STRING(100)
   }
 },
 {

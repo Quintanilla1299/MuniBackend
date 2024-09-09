@@ -29,5 +29,17 @@ export const attractionSchema = z.object({
     z.object({
       filename: z.string().regex(imageFilenameRegex, 'Invalid image filename. Allowed extensions: jpg, jpeg, png, gif')
     })
-  ).optional()
+  ).optional(),
+  remarks: z.string()
+    .min(1, 'Remarks are required')
+    .max(255, 'Remarks must be less than 255 characters'),
+  services: z.string()
+    .max(255, 'Services must be less than 255 characters')
+    .optional(),
+  owner: z.string()
+    .max(100, 'Owner name must be less than 100 characters')
+    .optional(),
+  community: z.string()
+    .max(100, 'Community name must be less than 100 characters')
+    .optional()
 })

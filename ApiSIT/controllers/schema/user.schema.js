@@ -10,5 +10,8 @@ export const userSchema = z.object({
   password: z.string()
     .min(10, 'Password must be at least 10 characters long')
     .max(100, 'Password must be less than 100 characters'),
-  person: personSchema.optional()
+  person: personSchema
+    .refine(data => data.first_name && data.last_name && data.cedula, {
+      message: 'Person details (first_name, last_name, and cedula) are required.'
+    })
 })
