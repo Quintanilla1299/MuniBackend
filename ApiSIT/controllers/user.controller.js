@@ -34,7 +34,7 @@ class UserController {
         last_name: user.Person.last_name,
         cedula: user.Person.cedula
       }
-      const token = jwt.sign(claims, secret, { expiresIn: '15m' })
+      const token = jwt.sign(claims, secret, { expiresIn: '23h' })
 
       const refreshTokenData = generateToken(user.user_id, 'refresh')
       await RefreshToken.create(refreshTokenData)
@@ -43,20 +43,22 @@ class UserController {
         .cookie('access_token', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
-          maxAge: 15 * 60 * 1000 // 15 minutos
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+          // maxAge: 15 * 60 * 1000 // 15 minutos
+          maxAge: 1 * 24 * 60 * 60 * 1000 // 7 días
+
         })
         .cookie('refresh_token', refreshTokenData.token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
           path: '/sit/session/'
         })
-        .json({ token, claims })
+        .json({ status: 200, token, claims })
     } catch (error) {
       console.error('Login error:', error)
-      res.status(500).json({ message: 'Internal server error' })
+      res.status(500).json({ status: 500, message: 'Internal server error' })
     }
   }
 
@@ -70,7 +72,12 @@ class UserController {
 
       res
         .clearCookie('access_token') // Elimina el token de acceso
-        .clearCookie('refresh_token') // Elimina el token de refresco
+        .clearCookie('refresh_token', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+          path: '/sit/session/'
+        }) // Elimina el token de refresco
         .status(200)
         .json({ message: 'Logout successful' })
     } catch (error) {

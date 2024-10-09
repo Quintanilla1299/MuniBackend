@@ -25,10 +25,10 @@ class PasswordResetTokenController {
 
       await sendEmail(user.email, 'Restablecer su contraseña', emailHTMLTemplate)
 
-      return res.status(200).json({ message: 'Correo de restablecimiento enviado' })
+      return res.status(200).json({ status: 200, message: 'Correo de restablecimiento enviado' })
     } catch (error) {
       console.error('Error al enviar el correo de restablecimiento:', error)
-      return res.status(500).json({ message: 'Error al enviar el correo de restablecimiento' })
+      return res.status(500).json({ status: 500, message: 'Error al enviar el correo de restablecimiento' })
     }
   }
 
@@ -46,31 +46,31 @@ class PasswordResetTokenController {
       })
 
       if (!resetToken) {
-        return res.status(400).json({ message: 'Token inválido o expirado' })
+        return res.status(400).json({ status: 400, message: 'Token inválido o expirado' })
       }
 
       if (newPassword !== newPasswordVerify) {
-        return res.status(400).json({ message: 'Las contraseñas no coinciden' })
+        return res.status(400).json({ status: 400, message: 'Las contraseñas no coinciden' })
       }
 
       const passwordValidation = passwordSchema.safeParse(newPassword)
       if (!passwordValidation.success) {
-        return res.status(400).json({ message: passwordValidation.error.errors[0].message })
+        return res.status(400).json({ status: 400, message: passwordValidation.error.errors[0].message })
       }
 
       const user = await User.findOne({ where: { user_id: resetToken.user_id } })
       if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' })
+        return res.status(404).json({ status: 404, message: 'Usuario no encontrado' })
       }
       user.password = newPassword
       await user.save()
 
       await PasswordResetToken.destroy({ where: { token } })
 
-      return res.status(200).json({ message: 'Contraseña restablecida con éxito' })
+      return res.status(200).json({ status: 200, message: 'Contraseña restablecida con éxito' })
     } catch (error) {
       console.error('Error al restablecer la contraseña:', error)
-      return res.status(500).json({ message: 'Error al restablecer la contraseña' })
+      return res.status(500).json({ status: 500, message: 'Error al restablecer la contraseña' })
     }
   }
 }

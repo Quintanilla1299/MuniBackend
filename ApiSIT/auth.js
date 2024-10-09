@@ -8,7 +8,14 @@ export const secret = process.env.JWT_SECRET
 export const authMiddleware = expressjwt({
   algorithms: ['HS256'],
   credentialsRequired: true, // Requiere token en todas las rutas que usan este middleware
-  secret
+  secret,
+  getToken: (req) => {
+    // Extraer el token desde la cookie
+    if (req.cookies.access_token) {
+      return req.cookies.access_token
+    }
+    return null
+  }
 })
 
 export async function decodeToken (token) {

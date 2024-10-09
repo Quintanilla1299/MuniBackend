@@ -12,7 +12,7 @@ class AttractionController {
       const data = attractionSchema.parse(req.body)
       const attraction = await Attraction.create(data)
 
-      if (data.contacts) {
+      /** if (data.contacts) {
         try {
           for (const contactData of data.contacts) {
             await Contact.create({ entity_type: 'attraction', entity_id: attraction.attraction_id, ...contactData })
@@ -21,7 +21,7 @@ class AttractionController {
           console.error('Error creating contacts:', contactError)
           return res.status(500).json({ message: 'Failed to create contacts', error: contactError.message })
         }
-      }
+      } */
 
       res.status(201).json({ message: 'Attraction created successfully', attraction })
     } catch (error) {
@@ -36,7 +36,6 @@ class AttractionController {
     try {
       const attractionId = req.params.id
       const files = req.files
-
       const attraction = await Attraction.findByPk(attractionId)
       if (!attraction) {
         return res.status(404).json({ message: 'Attraction not found' })
@@ -53,9 +52,11 @@ class AttractionController {
           return res.status(500).json({ message: 'Failed to save images', error: imageError.message })
         }
       } else {
+        console.log('No images uploaded')
         res.status(400).json({ message: 'No images uploaded' })
       }
     } catch (error) {
+      console.log('error')
       res.status(500).json({ message: 'Internal server error' })
     }
   }
@@ -131,26 +132,15 @@ class AttractionController {
 
   async delete (req, res) {
     try {
-      const attraction = await Attraction.findByPk(req.params.id, {
-        include: [Image]
-      })
-
+      const attraction = await Attraction.findByPk(req.params.id)
       if (!attraction) {
         return res.status(404).json({ message: 'Attraction not found' })
-      }
-
-      if (attraction.Images.length > 0) {
-        for (const image of attraction.Images) {
-          const filePath = path.join('images', image.entity_type, image.filename)
-          if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath)
-          }
-        }
       }
 
       await attraction.destroy()
       res.status(200).json({ message: 'Attraction deleted successfully' })
     } catch (error) {
+      console.log(error)
       res.status(500).json({ message: 'Internal server error' })
     }
   }

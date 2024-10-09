@@ -18,8 +18,17 @@ const createMulterStorage = (entityType) => {
   })
 }
 
-const imageFilter = (req, file, cb) => {
-  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif']
+const multimediaFilter = (req, file, cb) => {
+  const allowedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'video/mp4',
+    'video/x-msvideo', // AVI
+    'audio/mpeg', // MP3
+    'audio/wav', // WAV
+    'application/pdf'// PDF
+  ]
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true)
   } else {
@@ -29,7 +38,7 @@ const imageFilter = (req, file, cb) => {
 
 const uploadFiles = (entityType) => {
   const storage = createMulterStorage(entityType)
-  return multer({ storage, fileFilter: imageFilter })
+  return multer({ storage, fileFilter: multimediaFilter })
 }
 
 export const checkEntityExists = (model) => {

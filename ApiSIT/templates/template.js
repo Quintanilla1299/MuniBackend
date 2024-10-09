@@ -2,7 +2,7 @@ export const getEmailTemplate = (data) => {
   const { email, token } = data
 
   const emailUser = email.split('@')[0].toString()
-  const url = 'https://'
+  const url = 'http://localhost:3000/authentication/resetPassword'
 
   return `
     <form>

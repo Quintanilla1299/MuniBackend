@@ -5,6 +5,8 @@ import { User } from './models/user.model.js'
 import { Person } from './models/person.model.js'
 import { RefreshToken } from './models/refresh_token.model.js'
 import { PasswordResetToken } from './models/password_reset_token.model.js'
+import { Accessibility } from './models/accessibility.model.js'
+import { Transport } from './models/transport.model.js'
 
 // Definir asociaciones
 
@@ -21,6 +23,11 @@ Attraction.hasMany(Image, {
   onDelete: 'CASCADE',
   scope: { entity_type: 'attraction' }
 })
+Attraction.hasOne(Accessibility, {
+  foreignKey: 'attraction_id',
+  onDelete: 'CASCADE',
+  scope: { entity_type: 'attraction' }
+})
 Contact.belongsTo(Attraction, {
   foreignKey: 'entity_id',
   allowNull: false,
@@ -29,6 +36,11 @@ Contact.belongsTo(Attraction, {
 Image.belongsTo(Attraction, {
   foreignKey: 'entity_id',
   allowNull: false,
+  constraints: false,
+  scope: { entity_type: 'attraction' }
+})
+Accessibility.belongsTo(Attraction, {
+  foreignKey: 'attraction_id',
   scope: { entity_type: 'attraction' }
 })
 
@@ -55,4 +67,20 @@ RefreshToken.belongsTo(User, {
 })
 PasswordResetToken.belongsTo(User, {
   foreignKey: 'user_id'
+})
+
+// transport
+
+Transport.hasMany(Image, {
+  foreignKey: 'entity_id',
+  allowNull: false,
+  onDelete: 'CASCADE',
+  scope: { entity_type: 'transport' }
+})
+
+Image.belongsTo(Transport, {
+  foreignKey: 'entity_id',
+  allowNull: false,
+  constraints: false,
+  scope: { entity_type: 'transport' }
 })
