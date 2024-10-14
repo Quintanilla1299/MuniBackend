@@ -1,5 +1,5 @@
 import express from 'express'
-import EducationalResourceController from '../controllers/educational.controller'
+import EducationalResourceController from '../controllers/educational.controller.js'
 
 export const educationalRouter = express.Router()
 
