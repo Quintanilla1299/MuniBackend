@@ -15,14 +15,16 @@ Person.init({
     type: DataTypes.STRING(50),
     allowNull: false,
     validate: {
-      isAlpha: true
+      notEmpty: true,
+      is: /^[a-zA-Z\s]+$/i // Permite letras y espacios
     }
   },
   last_name: {
     type: DataTypes.STRING(50),
     allowNull: false,
     validate: {
-      isAlpha: true
+      notEmpty: true,
+      is: /^[a-zA-Z\s]+$/i // Permite letras y espacios
     }
   },
   cedula: {
