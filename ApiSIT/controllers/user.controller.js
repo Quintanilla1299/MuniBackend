@@ -169,7 +169,7 @@ class UserController {
       const { username, email, password, person } = userSchema.parse(req.body)
 
       const user = await User.create({ username, email, password }, { transaction })
-
+      console.log(user)
       if (person) {
         try {
           await Person.create({ ...person, user_id: user.user_id }, { transaction })
@@ -182,8 +182,10 @@ class UserController {
       await transaction.commit()
       res.status(201).json({ message: 'User created successfully', user })
     } catch (error) {
+      console.log(error)
       await transaction.rollback()
       if (error instanceof z.ZodError) {
+        console.log(error.errors)
         return res.status(400).json({ errors: error.errors })
       }
       res.status(500).json({ message: 'Internal server error', error })
