@@ -6,14 +6,46 @@ class MultimediaController {
   // Crear un nuevo archivo multimedia
   async create (req, res) {
     try {
-      // Validar los datos con Zod
-      const validatedData = multimediaSchema.parse(req.body)
+      // Extraer los archivos y el cuerpo
+      const files = req.files // Asegúrate de que esto sea un array
+      const { name, title, description, type } = req.body
 
-      // Crear el registro en la base de datos
-      const multimedia = await MultimediaModel.create(validatedData)
-      return res.status(201).json({ status: 201, data: multimedia })
+      // Verificar si se subieron archivos
+      if (!files || files.length === 0) {
+        return res.status(400).json({ status: 400, message: 'El archivo es requerido' })
+      }
+
+      // Iterar sobre los archivos
+      const multimediaEntries = [] // Almacena los registros que se crearán
+      for (const file of files) {
+        // Validar los datos de req.body con Zod
+        const validatedData = multimediaSchema.parse({
+          name,
+          title,
+          description,
+          url: `${req.protocol}://${req.get('host')}/images/multimedia/${file.filename}`, // Asegúrate de que 'multimedia' es la carpeta correcta
+          type
+        })
+
+        console.log(validatedData)
+
+        // Crear el registro en la base de datos
+        const multimedia = await MultimediaModel.create({
+          title: validatedData.title,
+          url: validatedData.url,
+          type: validatedData.type,
+          name: validatedData.name,
+          description: validatedData.description,
+          file: file.path // Almacena la ruta del archivo
+        })
+
+        multimediaEntries.push(multimedia) // Agregar a la lista de entradas
+      }
+
+      return res.status(201).json({ status: 201, data: multimediaEntries })
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.log(error.errors)
         return res.status(400).json({ status: 400, errors: error.errors })
       }
       console.error('Error al crear el archivo multimedia:', error)

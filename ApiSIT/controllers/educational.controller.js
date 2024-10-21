@@ -6,13 +6,17 @@ import { z } from 'zod'
 class EducationalResourceController {
   async create (req, res) {
     try {
+      console.log(req.body)
       const validatedData = educationalResourceSchema.parse(req.body)
+      console.log(validatedData)
       const resource = await EducationalResource.create(validatedData)
       return res.status(201).json({ status: 201, data: resource })
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.log(error.errors)
         return res.status(400).json({ status: 400, errors: error.errors })
       }
+      console.log(error)
       return res.status(500).json({ status: 500, message: 'Error al crear el recurso educativo' })
     }
   }

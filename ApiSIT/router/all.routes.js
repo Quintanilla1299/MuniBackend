@@ -7,6 +7,7 @@ import { transportRouter } from './transport.routes.js'
 import { multimediaRouter } from './multimedia.routes.js'
 import { educationalRouter } from './educational_resources.routes.js'
 import { infoLegalRegualatoriaRouter } from './info_legal_regulatoria.routes.js'
+import { RiskZoneRouter } from './risk_zone.routes.js'
 
 export const router = Router()
 
@@ -23,3 +24,4 @@ router.use('/transporte', transportRouter)
 router.use('/multimedia', multimediaRouter)
 router.use('/educacion-turistica', educationalRouter)
 router.use('/info-legal-regulatoria', infoLegalRegualatoriaRouter)
+router.use('/zona-riesgo', RiskZoneRouter)

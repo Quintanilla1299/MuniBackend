@@ -1,14 +1,13 @@
 import { Router } from 'express'
 import MultimediaController from '../controllers/multimedia.controller.js'
-import uploadFiles, { checkEntityExists } from '../images/upload.js'
-import { MultimediaModel } from '../models/multimedia.model.js'
+import uploadFiles from '../images/upload.js'
 
 export const multimediaRouter = Router()
 
-const uploadTransportImages = uploadFiles('multimedia').array('images', 10)
+const uploadMultiFiles = uploadFiles('multimedia').array('file', 10)
 
 // Crear un nuevo archivo multimedia
-multimediaRouter.post('/agregar', uploadTransportImages, checkEntityExists(MultimediaModel), MultimediaController.create)
+multimediaRouter.post('/agregar', uploadMultiFiles, MultimediaController.create)
 
 // Obtener todos los archivos multimedia
 multimediaRouter.get('/listar', MultimediaController.findAll)
