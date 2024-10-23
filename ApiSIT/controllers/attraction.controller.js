@@ -21,12 +21,13 @@ class AttractionController {
           return res.status(500).json({ message: 'Failed to create contacts', error: contactError.message })
         }
       } */
-
       res.status(201).json({ message: 'Attraction created successfully', attraction })
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.log(error.errors)
         return res.status(400).json({ errors: error.errors })
       }
+      console.log(error)
       res.status(500).json({ message: 'Internal server error' })
     }
   }

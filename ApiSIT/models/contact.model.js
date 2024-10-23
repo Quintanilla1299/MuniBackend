@@ -30,12 +30,22 @@ Contact.init({
     allowNull: false,
     validate: {
       notEmpty: true,
-      isValidContactValue (value) {
-        if (this.contact_type === 'email' && !/^\S+@\S+\.\S+$/.test(value)) {
-          throw new Error('Invalid email format')
+      isValidContactValue(value) {
+        if (this.contact_type === 'email') {
+          // Remover espacios del correo antes de validarlo
+          const emailValue = value.trim() // Elimina espacios antes y después
+
+          if (!/^\S+@\S+\.\S+$/.test(emailValue)) {
+            throw new Error('Invalid email format')
+          }
         }
-        if (this.contact_type === 'phone' && !/^[0-9\-()+ ]+$/.test(value)) {
-          throw new Error('Invalid phone number format')
+        if (this.contact_type === 'phone') {
+          // Remover espacios del número de teléfono antes de validarlo
+          const phoneValue = value.replace(/\s+/g, '')
+
+          if (!/^[0-9\-()+]+$/.test(phoneValue)) {
+            throw new Error('Invalid phone number format')
+          }
         }
       }
     }
