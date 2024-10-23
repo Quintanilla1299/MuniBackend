@@ -27,12 +27,18 @@ const multimediaFilter = (req, file, cb) => {
     'video/x-msvideo', // AVI
     'audio/mpeg', // MP3
     'audio/wav', // WAV
-    'application/pdf'// PDF
+    'application/pdf', // PDF
+    'application/msword', // DOC
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+    'application/vnd.ms-excel', // XLS
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
+    'application/vnd.ms-powerpoint', // PPT
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation' // PPTX
   ]
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true)
   } else {
-    cb(new Error('Invalid file type. Only JPEG, PNG, and GIF are allowed.'), false)
+    cb(new Error('Invalid file type. Only JPEG, PNG, GIF, MP4, AVI, MP3, WAV, PDF, DOC, DOCX, XLS, XLSX, PPT, and PPTX are allowed.'), false)
   }
 }
 

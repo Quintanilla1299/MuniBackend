@@ -7,6 +7,9 @@ import { RefreshToken } from './models/refresh_token.model.js'
 import { PasswordResetToken } from './models/password_reset_token.model.js'
 import { Accessibility } from './models/accessibility.model.js'
 import { Transport } from './models/transport.model.js'
+import DocumentFile from './models/document_file.model.js'
+import { EducationalResource } from './models/educational_resource.model.js'
+import { InfoLegalRegulatoria } from './models/info_legal_regulatoria.model.js'
 
 // Definir asociaciones
 
@@ -83,4 +86,22 @@ Image.belongsTo(Transport, {
   allowNull: false,
   constraints: false,
   scope: { entity_type: 'transport' }
+})
+
+EducationalResource.hasMany(DocumentFile, {
+  foreignKey: 'entity_id',
+  onDelete: 'CASCADE'
+})
+
+DocumentFile.belongsTo(EducationalResource, {
+  foreignKey: 'entity_id'
+})
+
+InfoLegalRegulatoria.hasMany(DocumentFile, {
+  foreignKey: 'entity_id',
+  onDelete: 'CASCADE'
+})
+
+DocumentFile.belongsTo(InfoLegalRegulatoria, {
+  foreignKey: 'entity_id'
 })

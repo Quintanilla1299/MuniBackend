@@ -194,7 +194,7 @@ class UserController {
 
   async findAll (req, res) {
     try {
-      const users = await User.findAll({ include: Person })
+      const users = await User.findAll({ include: Person, attributes: { exclude: ['password'] } })
       res.status(200).json({ users })
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' })
@@ -228,19 +228,15 @@ class UserController {
 
   async update (req, res) {
     try {
-      const { username, email, password, person } = userSchema.parse(req.body)
+      console.log('req', req.body)
+      const { username, email, person } = userSchema.parse(req.body)
       const user = await User.findByPk(req.params.id)
-
+      console.log(user)
       if (!user) {
         return res.status(404).json({ message: 'User not found' })
       }
 
-      const updateData = { username, email }
-      if (password) {
-        updateData.password = password // La encriptación se maneja en el hook del modelo
-      }
-
-      await user.update({ username, email, password })
+      await user.update({ username, email })
 
       if (person) {
         const personRecord = await Person.findOne({ where: { user_id: user.user_id } })
@@ -254,8 +250,10 @@ class UserController {
       res.status(200).json({ message: 'User updated successfully', user })
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.log(error.errors)
         return res.status(400).json({ errors: error.errors })
       }
+      console.log(error)
       res.status(500).json({ message: 'Internal server error' })
     }
   }

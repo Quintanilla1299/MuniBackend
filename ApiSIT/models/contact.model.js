@@ -30,7 +30,7 @@ Contact.init({
     allowNull: false,
     validate: {
       notEmpty: true,
-      isValidContactValue(value) {
+      isValidContactValue (value) {
         if (this.contact_type === 'email') {
           // Remover espacios del correo antes de validarlo
           const emailValue = value.trim() // Elimina espacios antes y después
