@@ -51,6 +51,9 @@ Attraction.init({
   services: {
     type: DataTypes.STRING(255)
   },
+  accessibility: {
+    type: DataTypes.STRING(255)
+  },
   owner: {
     type: DataTypes.STRING(100)
   },

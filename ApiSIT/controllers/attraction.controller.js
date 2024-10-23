@@ -11,7 +11,6 @@ class AttractionController {
     try {
       const data = attractionSchema.parse(req.body)
       const attraction = await Attraction.create(data)
-
       /** if (data.contacts) {
         try {
           for (const contactData of data.contacts) {
@@ -68,6 +67,7 @@ class AttractionController {
       })
       res.status(200).json(attractions)
     } catch (error) {
+      console.log(error)
       res.status(500).json({ message: 'Internal server error' })
     }
   }

@@ -41,5 +41,8 @@ export const attractionSchema = z.object({
     .optional(),
   community: z.string()
     .max(100, 'Community name must be less than 100 characters')
+    .optional(),
+  accessibility: z.string()
+    .max(100, 'accessibility name must be less than 100 characters')
     .optional()
 })
