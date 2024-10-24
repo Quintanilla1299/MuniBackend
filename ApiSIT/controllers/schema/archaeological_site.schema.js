@@ -4,7 +4,11 @@ import { z } from 'zod'
 export const archaeologicalSiteSchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio'),
   description: z.string().min(1, 'La descripción es obligatoria'),
-  latitude: z.number().min(-90).max(90, 'Latitud no válida'),
-  longitude: z.number().min(-180).max(180, 'Longitud no válida'),
+  latitude: z.coerce.number().refine(val => val >= -90 && val <= 90, {
+    message: 'La latitud debe estar entre -90 y 90'
+  }),
+  longitude: z.coerce.number().refine(val => val >= -180 && val <= 180, {
+    message: 'La longitud debe estar entre -180 y 180'
+  }),
   image: z.string().nullable().optional()
 })

@@ -10,6 +10,7 @@ import { Transport } from './models/transport.model.js'
 import DocumentFile from './models/document_file.model.js'
 import { EducationalResource } from './models/educational_resource.model.js'
 import { InfoLegalRegulatoria } from './models/info_legal_regulatoria.model.js'
+import { ArchaeologicalSite } from './models/archaeological_site.model.js'
 
 // Definir asociaciones
 
@@ -94,7 +95,8 @@ EducationalResource.hasMany(DocumentFile, {
 })
 
 DocumentFile.belongsTo(EducationalResource, {
-  foreignKey: 'entity_id'
+  foreignKey: 'entity_id',
+  onDelete: 'CASCADE'
 })
 
 InfoLegalRegulatoria.hasMany(DocumentFile, {
@@ -103,5 +105,16 @@ InfoLegalRegulatoria.hasMany(DocumentFile, {
 })
 
 DocumentFile.belongsTo(InfoLegalRegulatoria, {
-  foreignKey: 'entity_id'
+  foreignKey: 'entity_id',
+  onDelete: 'CASCADE'
+})
+
+ArchaeologicalSite.hasMany(Image, {
+  foreignKey: 'entity_id',
+  onDelete: 'CASCADE'
+})
+
+Image.belongsTo(ArchaeologicalSite, {
+  foreignKey: 'entity_id',
+  onDelete: 'CASCADE'
 })

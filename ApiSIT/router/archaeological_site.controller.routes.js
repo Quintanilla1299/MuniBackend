@@ -13,4 +13,4 @@ archaeologicalRouter.get('/listar', ArchaeologicalSiteController.findAll) // Obt
 archaeologicalRouter.get('buscar/:id', ArchaeologicalSiteController.findOne) // Obtener un sitio por ID
 archaeologicalRouter.post('/agregar', ArchaeologicalSiteController.create) // Crear un nuevo sitio
 archaeologicalRouter.put('actualizar/:id', ArchaeologicalSiteController.update) // Actualizar un sitio existente
-archaeologicalRouter.delete('eliminar/:id', ArchaeologicalSiteController.delete) // Eliminar un sitio por ID
+archaeologicalRouter.delete('/eliminar/:id', ArchaeologicalSiteController.delete) // Eliminar un sitio por ID

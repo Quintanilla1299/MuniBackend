@@ -1,3 +1,4 @@
+import DocumentFile from '../models/document_file.model.js'
 import { EducationalResource } from '../models/educational_resource.model.js'
 import { educationalResourceSchema } from './schema/educationalResource.schema.js'
 
@@ -74,6 +75,35 @@ class EducationalResourceController {
       return res.status(204).json() // No content
     } catch (error) {
       return res.status(500).json({ status: 500, message: 'Error al eliminar el recurso educativo' })
+    }
+  }
+
+  async uploadFiles (req, res) {
+    try {
+      const id = req.params.id
+      const files = req.files
+      const attraction = await EducationalResource.findByPk(id)
+      if (!attraction) {
+        return res.status(404).json({ message: 'not found' })
+      }
+
+      if (files) {
+        try {
+          for (const file of files) {
+            await DocumentFile.create({ entity_id: id, filename: file.filename })
+          }
+          res.status(200).json({ message: 'uploaded successfully' })
+        } catch (imageError) {
+          console.error('Error saving:', imageError)
+          return res.status(500).json({ message: 'Failed to save', error: imageError.message })
+        }
+      } else {
+        console.log('No uploaded')
+        res.status(400).json({ message: 'No uploaded' })
+      }
+    } catch (error) {
+      console.log('error')
+      res.status(500).json({ message: 'Internal server error' })
     }
   }
 }

@@ -5,12 +5,14 @@ import fs from 'fs'
 // Función para crear el almacenamiento de Multer
 const createMulterStorage = (entityType) => {
   return multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: async (req, file, cb) => {
       const uploadPath = path.join('images', entityType)
-      if (!fs.existsSync(uploadPath)) {
-        fs.mkdirSync(uploadPath, { recursive: true })
+      try {
+        await fs.promises.mkdir(uploadPath, { recursive: true })
+        cb(null, uploadPath)
+      } catch (err) {
+        cb(new Error('Error creando el directorio de subida.'), null)
       }
-      cb(null, uploadPath)
     },
     filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`)
@@ -44,7 +46,11 @@ const multimediaFilter = (req, file, cb) => {
 
 const uploadFiles = (entityType) => {
   const storage = createMulterStorage(entityType)
-  return multer({ storage, fileFilter: multimediaFilter })
+  return multer({
+    storage,
+    fileFilter: multimediaFilter,
+    limits: { fileSize: 10 * 1024 * 1024 } // Límite de 10 MB
+  })
 }
 
 export const checkEntityExists = (model) => {
