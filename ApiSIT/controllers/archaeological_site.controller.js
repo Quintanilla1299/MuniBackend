@@ -63,6 +63,7 @@ class ArchaeologicalSiteController {
       const objectId = req.params.id
       const files = req.files
       const object = await ArchaeologicalSite.findByPk(objectId)
+      console.log(files)
       if (!object) {
         return res.status(404).json({ message: ' not found' })
       }
@@ -70,7 +71,7 @@ class ArchaeologicalSiteController {
       if (files) {
         try {
           for (const file of files) {
-            await Image.create({ entity_id: objectId, entity_type: 'archaeological_site', filename: file.filename })
+            await Image.create({ entity_id: objectId, entity_type: 'archaeological_Site', filename: file.filename })
           }
           res.status(200).json({ message: 'Images uploaded successfully' })
         } catch (imageError) {

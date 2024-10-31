@@ -1,7 +1,7 @@
 import DocumentFile from '../models/document_file.model.js'
 import { EducationalResource } from '../models/educational_resource.model.js'
 import { educationalResourceSchema } from './schema/educationalResource.schema.js'
-
+import path from 'path'
 import { z } from 'zod'
 
 class EducationalResourceController {
@@ -22,10 +22,28 @@ class EducationalResourceController {
     }
   }
 
+  static normalizePath (filePath) {
+    return filePath.split(path.sep).join('/')
+  }
+
   async findAll (req, res) {
     try {
-      const resources = await EducationalResource.findAll()
-      return res.status(200).json({ status: 200, data: resources })
+      const resources = await EducationalResource.findAll(
+        { include: [DocumentFile] }
+      )
+
+      const normalizedLegalInfos = resources.map(info => {
+        if (info.document_files && info.document_files.length > 0) {
+          // Normaliza la ruta de cada archivo
+          info.document_files = info.document_files.map(file => {
+            file.filePath = EducationalResourceController.normalizePath(file.filePath)
+            return file
+          })
+        }
+        return info
+      })
+
+      return res.status(200).json({ status: 200, data: normalizedLegalInfos })
     } catch (error) {
       return res.status(500).json({ status: 500, message: 'Error al obtener los recursos educativos' })
     }
@@ -80,17 +98,21 @@ class EducationalResourceController {
 
   async uploadFiles (req, res) {
     try {
+      console.log(req.body)
       const id = req.params.id
       const files = req.files
-      const attraction = await EducationalResource.findByPk(id)
-      if (!attraction) {
+      const ilr = await EducationalResource.findByPk(id)
+      console.log(files)
+      console.log(ilr)
+
+      if (!ilr) {
         return res.status(404).json({ message: 'not found' })
       }
 
       if (files) {
         try {
           for (const file of files) {
-            await DocumentFile.create({ entity_id: id, filename: file.filename })
+            await DocumentFile.create({ entity_id: id, filename: file.filename, filePath: file.path, fileSize: file.size, fileType: file.mimetype })
           }
           res.status(200).json({ message: 'uploaded successfully' })
         } catch (imageError) {

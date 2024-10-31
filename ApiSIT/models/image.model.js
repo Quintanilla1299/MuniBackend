@@ -23,7 +23,8 @@ Image.init({
     allowNull: false
   },
   entity_type: {
-    type: DataTypes.ENUM('attraction', 'transport'),
+    // type: DataTypes.ENUM('attraction', 'transport'),
+    type: DataTypes.STRING(255),
     allowNull: false
   },
   filename: {
