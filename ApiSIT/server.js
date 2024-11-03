@@ -12,7 +12,7 @@ import publicRouter from './router/public.routes.js'
 export const PORT = process.env.PORT ?? 9000
 export const app = express()
 app.disable('x-powered-by')
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }), json(), cookieParser())
+app.use(cors({ origin: '*', credentials: true }), json(), cookieParser())
 
 app.use('/images', express.static(path.join('images')))
 
