@@ -11,8 +11,20 @@ import DocumentFile from './models/document_file.model.js'
 import { EducationalResource } from './models/educational_resource.model.js'
 import { InfoLegalRegulatoria } from './models/info_legal_regulatoria.model.js'
 import { ArchaeologicalSite } from './models/archaeological_site.model.js'
+import { Notification } from './models/notification.model.js' // Asegúrate de importar el modelo Notification
 
 // Definir asociaciones
+
+User.hasMany(Notification, {
+  foreignKey: 'user_id', // La clave foránea en la tabla Notification
+  onDelete: 'CASCADE' // Eliminar notificaciones si se elimina el usuario
+})
+
+// Definir asociación de notificación a usuario
+Notification.belongsTo(User, {
+  foreignKey: 'user_id', // La clave foránea en la tabla Notification
+  allowNull: false // Aseguramos que cada notificación tenga un usuario asociado
+})
 
 // atraccion
 Attraction.hasMany(Contact, {

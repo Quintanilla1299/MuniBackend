@@ -10,6 +10,7 @@ import { infoLegalRegualatoriaRouter } from './info_legal_regulatoria.routes.js'
 import { RiskZoneRouter } from './risk_zone.routes.js'
 import { archaeologicalRouter } from './archaeological_site.controller.routes.js'
 import travelRouter from './travel_destination.routes.js'
+import { notificationRouter } from './notification.routes.js'
 
 export const router = Router()
 
@@ -29,3 +30,4 @@ router.use('/info-legal-regulatoria', infoLegalRegualatoriaRouter)
 router.use('/zona-riesgo', RiskZoneRouter)
 router.use('/sitio-arqueologico', archaeologicalRouter)
 router.use('/guia-viaje', travelRouter)
+router.use('/notificacion', notificationRouter)
