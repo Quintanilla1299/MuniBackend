@@ -15,10 +15,10 @@ export const PORT = process.env.PORT ?? 9000
 export const app = express()
 
 const server = http.createServer(app)
-const io = new Server(server, { cors: { origin: '*' } })
+const io = new Server(server, { cors: { origin: 'http://localhost:3000' } })
 
 app.disable('x-powered-by')
-app.use(cors({ origin: '*', credentials: true }), json(), cookieParser())
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }), json(), cookieParser())
 
 app.use('/images', express.static(path.join('images')))
 
