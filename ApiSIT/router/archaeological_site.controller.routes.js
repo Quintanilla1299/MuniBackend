@@ -12,5 +12,5 @@ archaeologicalRouter.post('/agregar-imagenes/:id', checkEntityExists(Archaeologi
 archaeologicalRouter.get('/listar', ArchaeologicalSiteController.findAll) // Obtener todos los sitios
 archaeologicalRouter.get('buscar/:id', ArchaeologicalSiteController.findOne) // Obtener un sitio por ID
 archaeologicalRouter.post('/agregar', ArchaeologicalSiteController.create) // Crear un nuevo sitio
-archaeologicalRouter.put('actualizar/:id', ArchaeologicalSiteController.update) // Actualizar un sitio existente
+archaeologicalRouter.put('/actualizar/:id', ArchaeologicalSiteController.update) // Actualizar un sitio existente
 archaeologicalRouter.delete('/eliminar/:id', ArchaeologicalSiteController.delete) // Eliminar un sitio por ID
