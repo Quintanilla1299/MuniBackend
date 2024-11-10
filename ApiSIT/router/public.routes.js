@@ -19,7 +19,7 @@ publicRouter.post('/sit/send-email', PasswordResetTokenController.sendResetEmail
 publicRouter.post('/sit/reset/:token', PasswordResetTokenController.resetPassword)
 publicRouter.post('/sit/session/refresh-token', refreshAuthMiddleware, userController.refreshAccessToken)
 publicRouter.post('/sit/session/logout', refreshAuthMiddleware, userController.logout)
-publicRouter.post('/sit/public/atraccion/listar', attractionController.findAll)
+publicRouter.post('/route/public/atraccion/listar', attractionController.findAll)
 publicRouter.post('/sit/public/transporte/listar', TransportController.findAll)
 publicRouter.post('/sit/public/multimedia/listar', MultimediaController.findAll)
 publicRouter.post('/sit/public/educacion-turistica/listar', EducationalResourceController.findAll)
