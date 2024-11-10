@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
 
 sequelize.sync().then(() => {
   server.listen(PORT, () => {
-    console.log(`servidor corriendo en http://localhost:${PORT}/sit`)
+    console.log(`servidor corriendo en http://localhost:${PORT}`)
   })
 })
 
