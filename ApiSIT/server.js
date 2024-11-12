@@ -18,7 +18,12 @@ const server = http.createServer(app)
 const io = new Server(server, { cors: { origin: 'http://localhost:3000' } })
 
 app.disable('x-powered-by')
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }), json(), cookieParser())
+app.use(cors({
+  origin: ['http://localhost:3001', 'http://localhost:3000'], // Origen permitido
+  credentials: true,
+  methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'] // Encabezados permitidos
+}), json(), cookieParser())
 
 app.use('/images', express.static(path.join('images')))
 

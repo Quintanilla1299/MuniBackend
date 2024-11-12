@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 class TransportController {
   // Crear un nuevo transporte
-  async create (req, res) {
+  async create(req, res) {
     try {
       console.log(req.body)
       // Validar los datos con Zod
@@ -27,7 +27,7 @@ class TransportController {
     }
   }
 
-  async uploadImages (req, res) {
+  async uploadImages(req, res) {
     try {
       const transportId = req.params.id
       const files = req.files
@@ -57,7 +57,7 @@ class TransportController {
   }
 
   // Obtener todos los transportes
-  async findAll (req, res) {
+  async findAll(req, res) {
     try {
       const transports = await Transport.findAll({
         include: [Image]
@@ -70,7 +70,7 @@ class TransportController {
   }
 
   // Obtener un transporte por ID
-  async findOne (req, res) {
+  async findOne(req, res) {
     const { id } = req.params
 
     try {
@@ -88,7 +88,7 @@ class TransportController {
   }
 
   // Actualizar un transporte
-  async update (req, res) {
+  async update(req, res) {
     const { id } = req.params
 
     try {
@@ -118,19 +118,21 @@ class TransportController {
   }
 
   // Eliminar un transporte
-  async delete (req, res) {
+  async delete(req, res) {
+    console.log(req)
     const { id } = req.params
-
+    console.log(id)
     try {
       const transport = await Transport.findByPk(id)
+      console.log(transport)
 
       if (!transport) {
         return res.status(404).json({ status: 404, message: 'Transporte no encontrado' })
       }
 
       // Eliminar el transporte
-      await transport.destroy()
-
+      const respuesta = await transport.destroy()
+      console.log(respuesta)
       return res.status(200).json({ status: 200, message: 'Transporte eliminado con éxito' })
     } catch (error) {
       console.error('Error al eliminar el transporte:', error)
