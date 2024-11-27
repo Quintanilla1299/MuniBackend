@@ -6,9 +6,27 @@ import { generateToken } from '../auth.js'
 import { getEmailTemplate } from '../templates/template.js'
 import { sendEmail } from '../utils/email.util.js'
 
+/* The line `const passwordSchema = z.string().min(10, 'Password must be at least 10 characters
+long').max(100, 'Password must be less than 100 characters')` is defining a schema using the Zod
+library for validating password strings. */
 const passwordSchema = z.string().min(10, 'Password must be at least 10 characters long').max(100, 'Password must be less than 100 characters')
 
 class PasswordResetTokenController {
+/**
+ * The function `sendResetEmail` sends a password reset email to a user with a generated token for
+ * resetting their password.
+ * @param req - req is the request object that contains information about the HTTP request made by the
+ * client, such as request headers, parameters, body, and more. In this specific function, the req
+ * object is used to extract the email from the request body to send a password reset email to the user
+ * associated with that email
+ * @param res - The `res` parameter in the `sendResetEmail` function is typically used to send a
+ * response back to the client making the request. In this case, it is an HTTP response object that
+ * allows you to send a response with a status code and data back to the client.
+ * @returns The `sendResetEmail` function returns a response with status code and message in JSON
+ * format. If the user is not found, it returns a 404 status with a message 'Usuario no encontrado'. If
+ * the email is successfully sent, it returns a 200 status with a message 'Correo de restablecimiento
+ * enviado'. If there is an error during the process, it returns a 500 status with
+ */
   async sendResetEmail (req, res) {
     const { email } = req.body
 
@@ -32,6 +50,22 @@ class PasswordResetTokenController {
     }
   }
 
+  /**
+ * The function `resetPassword` handles the process of resetting a user's password by validating a
+ * reset token, checking password criteria, updating the password, and handling potential errors.
+ * @param req - The `req` parameter in the `resetPassword` function stands for the request object. It
+ * contains information about the HTTP request made to the server, including data sent in the request
+ * body, parameters, headers, etc. In this function, `req.body` is used to access data sent in the
+ * @param res - The `res` parameter in the `resetPassword` function is the response object in Node.js
+ * Express framework. It is used to send a response back to the client making the request. In this
+ * function, `res` is used to send different HTTP status codes and JSON responses based on the outcome
+ * of
+ * @returns The `resetPassword` function returns JSON responses based on different scenarios:
+ * - If the token is invalid or expired: `{ status: 400, message: 'Token inválido o expirado' }` with
+ * status code 400.
+ * - If the new passwords do not match: `{ status: 400, message: 'Las contraseñas no coinciden' }` with
+ * status code
+ */
   async resetPassword (req, res) {
     const { newPassword, newPasswordVerify } = req.body
     const { token } = req.params

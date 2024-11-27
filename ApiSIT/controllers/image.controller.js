@@ -4,6 +4,19 @@ import path from 'path'
 import fs from 'fs'
 
 class ImageController {
+/**
+ * The function `uploadImages` asynchronously uploads images associated with a specific attraction,
+ * handling errors and returning appropriate responses.
+ * @param req - The `req` parameter in the `uploadImages` function is typically the request object that
+ * represents the HTTP request made to the server. It contains information about the request such as
+ * headers, parameters, body, files, etc. In this function, `req` is used to access the parameters
+ * (`req
+ * @param res - The `res` parameter in the `uploadImages` function is the response object that will be
+ * used to send a response back to the client making the request. It is typically used to send HTTP
+ * responses with status codes, headers, and data back to the client. In the provided code snippet, `
+ * @returns The `uploadImages` function returns different responses based on the outcome of the image
+ * upload process:
+ */
   async uploadImages (req, res) {
     try {
       const attractionId = req.params.id
@@ -32,6 +45,19 @@ class ImageController {
     }
   }
 
+  /**
+ * The `deleteImages` function deletes images associated with a specific attraction, both from the file
+ * system and the database, based on the provided image IDs.
+ * @param req - The `req` parameter in the `deleteImages` function stands for the request object. It
+ * contains information about the HTTP request that triggered the function, such as request headers,
+ * parameters, body, and more. In this case, it is used to extract the `id` parameter from the route (`
+ * @param res - The `res` parameter in the `deleteImages` function is the response object that will be
+ * used to send a response back to the client making the request. It is typically used to send HTTP
+ * responses with status codes, headers, and data.
+ * @returns The `deleteImages` function is returning a JSON response with a success message if the
+ * images are deleted successfully. If there is an error during the deletion process, it will return a
+ * JSON response with an error message and a status code of 500.
+ */
   async deleteImages (req, res) {
     try {
       const attractionId = req.params.id

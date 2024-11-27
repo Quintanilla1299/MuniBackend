@@ -6,6 +6,19 @@ import { io } from '../server.js'
 
 class NotificationController {
   // Crear una nueva notificación y emitir evento de tiempo real
+/**
+ * The function creates a new notification, validates the input data, emits the notification in
+ * real-time to all connected clients, and returns the created notification or error messages.
+ * @param req - The `req` parameter in the `create` function typically represents the HTTP request
+ * object, which contains information about the incoming request from the client, such as the request
+ * headers, parameters, body, and other relevant data. In this specific context, `req` is being used to
+ * access the request body
+ * @param res - The `res` parameter in the `create` function is typically used to send a response back
+ * to the client who made the request. In this case, it is an object representing the HTTP response
+ * that will be sent back to the client.
+ * @returns If the `create` function is successful in creating a new notification and emitting it in
+ * real-time, a response with status code 201 and the created notification data will be returned.
+ */
   async create (req, res) {
     try {
       const validatedData = notificationSchema.parse(req.body)
@@ -82,6 +95,18 @@ class NotificationController {
     }
   }
 
+  /**
+ * The function `markAsRead` asynchronously marks a notification as read in a JavaScript application.
+ * @param req - The `req` parameter in the `markAsRead` function typically represents the HTTP request
+ * object, which contains information about the incoming request from the client. This object includes
+ * data such as request headers, parameters, body, query parameters, and more.
+ * @param res - The `res` parameter in the `markAsRead` function is the response object that will be
+ * used to send a response back to the client making the request. It is typically used to set the
+ * status code, send data, and end the response.
+ * @returns If the notification is found and successfully marked as read, a JSON response with status
+ * code 200, a success message 'Notificación marcada como leída', and the updated notification data is
+ * returned.
+ */
   async markAsRead (req, res) {
     const { id } = req.params
 

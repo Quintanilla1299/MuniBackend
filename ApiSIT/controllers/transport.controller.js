@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 class TransportController {
   // Crear un nuevo transporte
-  async create(req, res) {
+  async create (req, res) {
     try {
       console.log(req.body)
       // Validar los datos con Zod
@@ -27,7 +27,21 @@ class TransportController {
     }
   }
 
-  async uploadImages(req, res) {
+  /**
+ * The function `uploadImages` asynchronously uploads images associated with a transport entity,
+ * handling errors and returning appropriate responses.
+ * @param req - The `req` parameter in the `uploadImages` function is typically the request object that
+ * contains information about the HTTP request made to the server. This object includes details such as
+ * request headers, parameters, body, files, and more. In this specific function, `req` is being used
+ * to access
+ * @param res - The `res` parameter in the `uploadImages` function is the response object that will be
+ * used to send back the response to the client making the request. It is typically used to set the
+ * status code, send data, or handle errors in the response.
+ * @returns If the `uploadImages` function is executed successfully, it will return a JSON response
+ * with a status code and message based on the outcome of the operation. Here are the possible return
+ * scenarios:
+ */
+  async uploadImages (req, res) {
     try {
       const transportId = req.params.id
       const files = req.files
@@ -57,7 +71,7 @@ class TransportController {
   }
 
   // Obtener todos los transportes
-  async findAll(req, res) {
+  async findAll (req, res) {
     try {
       const transports = await Transport.findAll({
         include: [Image]
@@ -70,7 +84,7 @@ class TransportController {
   }
 
   // Obtener un transporte por ID
-  async findOne(req, res) {
+  async findOne (req, res) {
     const { id } = req.params
 
     try {
@@ -88,7 +102,7 @@ class TransportController {
   }
 
   // Actualizar un transporte
-  async update(req, res) {
+  async update (req, res) {
     const { id } = req.params
 
     try {
@@ -118,7 +132,7 @@ class TransportController {
   }
 
   // Eliminar un transporte
-  async delete(req, res) {
+  async delete (req, res) {
     console.log(req)
     const { id } = req.params
     console.log(id)

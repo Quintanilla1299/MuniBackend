@@ -58,6 +58,21 @@ class ArchaeologicalSiteController {
     }
   }
 
+  /**
+ * The function `uploadImages` asynchronously handles the uploading of images associated with an
+ * archaeological site object, saving them to the database and returning appropriate responses based on
+ * the outcome.
+ * @param req - The `req` parameter in the `uploadImages` function is the request object, which
+ * contains information about the HTTP request made to the server. This object typically includes
+ * details such as the request headers, parameters, body, files (in case of file uploads), and other
+ * relevant information sent by the client
+ * @param res - The `res` parameter in the `uploadImages` function is the response object that will be
+ * used to send back the response to the client making the request. It is typically used to send HTTP
+ * responses with status codes, headers, and data back to the client. In the provided code snippet, `
+ * @returns If the `uploadImages` function is executed successfully, it will return a JSON response
+ * with a status code and message based on the outcome of the image upload process. Here are the
+ * possible return scenarios:
+ */
   async uploadImages (req, res) {
     try {
       const objectId = req.params.id
@@ -140,4 +155,9 @@ class ArchaeologicalSiteController {
   }
 }
 
+/* `export default new ArchaeologicalSiteController()` is exporting a new instance of the
+`ArchaeologicalSiteController` class as the default export of the file. This allows other modules to
+import and use this instance of the controller class when needed. By exporting it as the default
+export, it can be imported without needing to specify a specific name for it during the import
+statement. */
 export default new ArchaeologicalSiteController()

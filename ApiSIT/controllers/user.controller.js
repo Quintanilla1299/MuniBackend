@@ -201,6 +201,21 @@ class UserController {
     }
   }
 
+  /**
+ * The function findOne asynchronously retrieves a user by their ID and includes related person data,
+ * handling errors and returning appropriate responses.
+ * @param req - The `req` parameter in the `findOne` function typically represents the request object
+ * in an Express.js application. It contains information about the HTTP request that triggered the
+ * function, such as request headers, parameters, body, and query parameters. In this specific
+ * function, `req.params.id` is used to
+ * @param res - The `res` parameter in the `findOne` function is typically used to send a response back
+ * to the client who made the request. It is an object that represents the HTTP response that an
+ * Express.js route sends when it gets an HTTP request. The `res` object has methods like `res.status
+ * @returns If the user is found, the user object is being returned with a status code of 200. If the
+ * user is not found, a JSON response with a status code of 404 and a message 'User not found' is being
+ * returned. If there is an internal server error, a JSON response with a status code of 500 and a
+ * message 'Internal server error' is being returned.
+ */
   async findOne (req, res) {
     try {
       const user = await User.findByPk(req.params.id, { include: Person })
@@ -213,6 +228,10 @@ class UserController {
     }
   }
 
+  /* The above code is a JavaScript function that searches for a user in a database based on their email
+or username. It uses Sequelize ORM to query the database and find a user record where either the
+email or username matches the provided identifier. The function is asynchronous and returns a
+promise that resolves to the user object if found, including related Person data. */
   getUserByEmailOrUsername = async (identifier) => {
     console.log(identifier)
     return await User.findOne({
@@ -226,6 +245,21 @@ class UserController {
     })
   }
 
+  /**
+ * The function `update` asynchronously updates a user's information and associated person record,
+ * handling errors and returning appropriate responses.
+ * @param req - The `req` parameter in the `update` function is typically the request object that
+ * contains information about the HTTP request made to the server. It includes details such as the
+ * request body, parameters, headers, and more. In this specific code snippet, `req` is being used to
+ * access the request
+ * @param res - The `res` parameter in the `update` function is typically used to send a response back
+ * to the client who made the request. In this case, it is an HTTP response object that allows you to
+ * send a response with status codes, headers, and data back to the client.
+ * @returns If the user is found and successfully updated, a JSON response with status code 200 and a
+ * message "User updated successfully" along with the updated user object will be returned. If the user
+ * is not found, a JSON response with status code 404 and a message "User not found" will be returned.
+ * If there are validation errors in the request body, a JSON response with status code 400
+ */
   async update (req, res) {
     try {
       console.log('req', req.body)
@@ -258,6 +292,22 @@ class UserController {
     }
   }
 
+  /**
+ * The function deletes a user and associated person record from the database and returns appropriate
+ * messages based on the outcome.
+ * @param req - The `req` parameter typically represents the request object in Node.js applications. It
+ * contains information about the HTTP request that triggered the function, such as request headers,
+ * parameters, body, and more. In this context, `req` is likely an Express.js request object passed to
+ * the `delete` function
+ * @param res - The `res` parameter in the `delete` function is typically used to send a response back
+ * to the client who made the request. In this case, it is an object representing the HTTP response
+ * that will be sent back to the client after the user deletion operation is completed. The response
+ * may include status
+ * @returns If the user is not found, the function returns a 404 status with a JSON response { message:
+ * 'User not found' }. If an internal server error occurs during the deletion process, the function
+ * returns a 500 status with a JSON response { message: 'Internal server error' }. If the user is
+ * successfully deleted, the function returns a 200 status with a JSON response { message: '
+ */
   async delete (req, res) {
     try {
       const user = await User.findByPk(req.params.id)
