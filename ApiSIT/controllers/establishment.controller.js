@@ -77,7 +77,7 @@ class EstablishmentController {
         include: [
           {
             model: Image,
-            attributes: ["image_id", "filename", "url"], // Incluir la URL generada
+            attributes: ["image_id", "filename", "entity_type", "url"], // Incluye entity_type aquí
           },
           {
             model: Owner,

@@ -208,3 +208,41 @@ Transport.hasMany(Image, {
   constraints: false,
   scope: { entity_type: 'transport' },
 });
+
+
+
+Image.belongsTo(BasicService, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'basic-service' },
+});
+
+BasicService.hasMany(Image, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'basic_service' },
+});
+
+Image.belongsTo(SecurityService, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'security-service' },
+});
+
+SecurityService.hasMany(Image, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'security_service' },
+});
+
+Image.belongsTo(TourEvent, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'tour_event' },
+});
+
+TourEvent.hasMany(Image, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'tour_event' },
+});

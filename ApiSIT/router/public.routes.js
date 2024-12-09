@@ -31,10 +31,10 @@ publicRouter.get('/sit/public/info-legal-regulatoria/listar', LegalInfoControlle
 publicRouter.get('/sit/public/zona-riesgo/listar', RiskZoneController.findAll)
 publicRouter.get('/sit/public/sitio-arqueologico/listar', ArchaeologicalSiteController.findAll)
 publicRouter.get('/sit/public/guia-viaje/listar', TravelDestinationController.findAll)
-publicRouter.get("/sit/public/servicios-seguridad/listar", SecurityServiceController.findAll); // Obtener todos los servicios de seguridad
-publicRouter.get('/sit/public/establecimientos/listar', EstablishmentController.findAll);
-publicRouter.get('/sit/public/servicios-basicos/listar', BasicServiceController.findAll); // Obtener todos los servicios básicos
-publicRouter.get('/sit/public/eventos-tours/listar', TourEventController.findAll); // Obtener todos los eventos
+publicRouter.get('/sit/servicios-seguridad/listar', SecurityServiceController.findAll); // Obtener todos los servicios de seguridad
+publicRouter.get('/sit/establecimientos/listar', EstablishmentController.findAll);
+publicRouter.get('/sit/servicios-basicos/listar', BasicServiceController.findAll); // Obtener todos los servicios básicos
+publicRouter.get('/sit/eventos-tours/listar', TourEventController.findAll); // Obtener todos los eventos
 
 
 

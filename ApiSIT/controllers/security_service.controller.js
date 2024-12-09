@@ -1,7 +1,7 @@
-import { SecurityService } from '../models/security_service.model.js';
-import { Image } from '../models/image.model.js';
 import fs from 'fs';
 import path from 'path';
+import { SecurityService } from '../models/security_service.model.js';
+import { Image } from '../models/image.model.js';
 
 class SecurityServiceController {
   // Crear o actualizar un servicio de seguridad
@@ -11,28 +11,31 @@ class SecurityServiceController {
       const { id } = req.params;
       const data = req.body;
       const files = req.files;
-  
+
       // Validar campos obligatorios
       if (!data.name || !data.description || !data.phoneNumber) {
         return res.status(400).json({
-          message: "Name, description, and phone number are required fields.",
+          message: 'Name, description, and phone number are required fields.',
         });
       }
-  
+
       let securityService;
-  
+
       if (id) {
         // Actualizar servicio existente
         securityService = await SecurityService.findByPk(id, { transaction });
         if (!securityService) {
-          return res.status(404).json({ message: "Security service not found." });
+          return res.status(404).json({ message: 'Security service not found.' });
         }
         await securityService.update(data, { transaction });
-         // Eliminar imágenes viejas si hay nuevas
-         if (files && files.length > 0) {
-          const oldImages = await Image.findAll({ where: { entityId: id, entityType: "securityservice" } });
+
+        // Eliminar imágenes viejas si hay nuevas
+        if (files && files.length > 0) {
+          const oldImages = await Image.findAll({
+            where: { entity_id: id, entity_type: 'security_service' },
+          });
           for (const image of oldImages) {
-            const filePath = path.join('images', image.entityType, image.filename);
+            const filePath = path.join('images', image.entity_type, image.filename);
             if (fs.existsSync(filePath)) {
               fs.unlinkSync(filePath); // Elimina el archivo del sistema
             }
@@ -43,30 +46,38 @@ class SecurityServiceController {
         // Crear nuevo servicio
         securityService = await SecurityService.create(data, { transaction });
       }
-  
-      // Manejo de imágenes
+
+      // Verificar que el servicio fue creado o actualizado correctamente
+      if (!securityService) {
+        throw new Error('Failed to create or update security service.');
+      }
+
+      // Subir y registrar imágenes
       if (files && files.length > 0) {
         for (const file of files) {
-          await Image.create({
-            entityId: securityService.id,
-            entityType: "securityservice",
-            filename: file.filename,
-          }, { transaction });
+          await Image.create(
+            {
+              entity_id: securityService.securityServiceId,
+              entity_type: 'security_service',
+              filename: file.filename,
+              url: `/images/security_service/${file.filename}`, // Ruta pública para acceso a imágenes
+            },
+            { transaction }
+          );
         }
       }
-  
+
       await transaction.commit();
       res.status(201).json({
-        message: "Security service saved successfully.",
+        message: 'Security service saved successfully.',
         data: securityService,
       });
     } catch (error) {
       await transaction.rollback();
-      console.error("Error in createOrUpdate:", error);
-      res.status(500).json({ message: "Error saving security service." });
+      console.error('Error in createOrUpdate:', error);
+      res.status(500).json({ message: 'Error saving security service.' });
     }
   }
-  
 
   // Obtener todos los servicios de seguridad
   async findAll(req, res) {
@@ -75,57 +86,19 @@ class SecurityServiceController {
         include: [
           {
             model: Image,
-            attributes: ["imageId", "filename", "url"], // Incluir URL generada
+            attributes: ['image_id', 'filename', 'entity_type', 'url'],
           },
         ],
       });
-  
+
       if (!securityServices.length) {
-        return res.status(404).json({ message: "No security services found." });
+        return res.status(404).json({ message: 'No security services found.' });
       }
-  
+
       res.status(200).json({ data: securityServices });
     } catch (error) {
-      console.error("Error fetching security services:", error);
-      res.status(500).json({ message: "Error fetching security services." });
-    }
-  }
-  
-
-  // Subir imágenes de un servicio de seguridad
-  async uploadImages(req, res) {
-    try {
-      const securityServiceId = req.params.id;
-      const files = req.files;
-
-      const securityService = await SecurityService.findByPk(securityServiceId);
-      if (!securityService) {
-        return res.status(404).json({ message: 'Security service not found.' });
-      }
-
-      if (files && files.length > 0) {
-        try {
-          for (const file of files) {
-            await Image.create({
-              entityId: securityServiceId,
-              entityType: 'SecurityService',
-              filename: file.filename,
-            });
-          }
-          res.status(200).json({ message: 'Images uploaded successfully.' });
-        } catch (imageError) {
-          console.error('Error saving images:', imageError);
-          res.status(500).json({
-            message: 'Failed to save images.',
-            error: imageError.message,
-          });
-        }
-      } else {
-        res.status(400).json({ message: 'No images uploaded.' });
-      }
-    } catch (error) {
-      console.error('Error uploading images:', error);
-      res.status(500).json({ message: 'Internal server error.' });
+      console.error('Error fetching security services:', error);
+      res.status(500).json({ message: 'Error fetching security services.' });
     }
   }
 
@@ -137,23 +110,23 @@ class SecurityServiceController {
       if (!securityService) {
         return res.status(404).json({ message: 'Security service not found.' });
       }
-  
+
       // Eliminar imágenes asociadas
       const images = await Image.findAll({
-        where: { entityId: id, entityType: 'securityservice' },
+        where: { entity_id: id, entity_type: 'security_service' },
       });
-  
+
       for (const image of images) {
-        const filePath = path.join('images', image.entityType, image.filename);
+        const filePath = path.join('images', image.entity_type, image.filename);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath); // Elimina el archivo del sistema
         }
         await image.destroy(); // Elimina el registro de la base de datos
       }
-  
+
       // Eliminar el servicio de seguridad
       await securityService.destroy();
-  
+
       res.status(200).json({
         message: 'Security service and associated images deleted successfully.',
       });
@@ -162,7 +135,6 @@ class SecurityServiceController {
       res.status(500).json({ message: 'Error deleting security service.' });
     }
   }
-  
 }
 
 export default new SecurityServiceController();

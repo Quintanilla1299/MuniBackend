@@ -14,9 +14,7 @@ class BasicServiceController {
 
       // Validar campos obligatorios
       if (!data.name || !data.description || !data.phoneNumber) {
-        return res.status(400).json({
-          message: 'Name, description, and phone number are required fields.',
-        });
+        return res.status(400).json({ message: "Please provide all required fields." });
       }
 
       let basicService;
@@ -25,19 +23,19 @@ class BasicServiceController {
         // Actualizar servicio existente
         basicService = await BasicService.findByPk(id, { transaction });
         if (!basicService) {
-          return res.status(404).json({ message: 'Basic service not found.' });
+          return res.status(404).json({ message: "Basic service not found." });
         }
         await basicService.update(data, { transaction });
 
-        // Eliminar imágenes viejas si hay nuevas
-        if (files && files.length > 0) {
-          const oldImages = await Image.findAll({ where: { entityId: id, entityType: 'basicservice' } });
+        if (id && files && files.length > 0) {
+          // Elimina las imágenes viejas y sus archivos
+          const oldImages = await Image.findAll({ where: { entity_id: id, entity_type: 'basic_service' } });
           for (const image of oldImages) {
-            const filePath = path.join('images', image.entityType, image.filename);
+            const filePath = path.join('images', image.entity_type, image.filename);
             if (fs.existsSync(filePath)) {
               fs.unlinkSync(filePath); // Elimina el archivo del sistema
             }
-            await image.destroy({ transaction }); // Elimina el registro de la BD
+            await image.destroy(); // Elimina el registro de la BD
           }
         }
       } else {
@@ -45,26 +43,29 @@ class BasicServiceController {
         basicService = await BasicService.create(data, { transaction });
       }
 
-      // Subir y registrar nuevas imágenes
+      // Verificar que el servicio fue creado o actualizado correctamente
+      if (!basicService) {
+        throw new Error("Failed to create or update basic service.");
+      }
+
+      // Subir y registrar imágenes
       if (files && files.length > 0) {
         for (const file of files) {
           await Image.create({
-            entityId: basicService.id,
-            entityType: 'basicservice',
+            entity_id: basicService.basicServiceId,
+            entity_type: "basic_service",
             filename: file.filename,
+            url: `/images/basic_service/${file.filename}`,
           }, { transaction });
         }
       }
 
       await transaction.commit();
-      res.status(201).json({
-        message: 'Basic service saved successfully.',
-        data: basicService,
-      });
+      res.status(201).json({ message: "Basic service saved successfully.", data: basicService });
     } catch (error) {
       await transaction.rollback();
-      console.error('Error in createOrUpdate:', error);
-      res.status(500).json({ message: 'Error saving basic service.' });
+      console.error("Error in createOrUpdate:", error);
+      res.status(500).json({ message: "Error saving basic service." });
     }
   }
 
@@ -75,19 +76,17 @@ class BasicServiceController {
         include: [
           {
             model: Image,
-            attributes: ['imageId', 'filename', 'url'], // Incluir la URL generada
+            attributes: ["image_id", "filename", "entity_type", "url"],
           },
         ],
       });
-
       if (!basicServices.length) {
-        return res.status(404).json({ message: 'No basic services found.' });
+        return res.status(404).json({ message: "No basic services found." });
       }
-
       res.status(200).json({ data: basicServices });
     } catch (error) {
-      console.error('Error fetching basic services:', error);
-      res.status(500).json({ message: 'Error fetching basic services.' });
+      console.error("Error fetching basic services:", error);
+      res.status(500).json({ message: "Error fetching basic services." });
     }
   }
 
@@ -97,13 +96,16 @@ class BasicServiceController {
       const { id } = req.params;
       const basicService = await BasicService.findByPk(id);
       if (!basicService) {
-        return res.status(404).json({ message: 'Basic service not found.' });
+        return res.status(404).json({ message: "Basic service not found." });
       }
 
       // Eliminar imágenes asociadas
-      const images = await Image.findAll({ where: { entityId: id, entityType: 'basicservice' } });
+      const images = await Image.findAll({
+        where: { entity_id: id, entity_type: "basic_service" },
+      });
+
       for (const image of images) {
-        const filePath = path.join('images', image.entityType, image.filename);
+        const filePath = path.join('images', image.entity_type, image.filename);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath); // Elimina el archivo del sistema
         }
@@ -114,11 +116,11 @@ class BasicServiceController {
       await basicService.destroy();
 
       res.status(200).json({
-        message: 'Basic service and associated images deleted successfully.',
+        message: "Basic service and associated images deleted successfully.",
       });
     } catch (error) {
-      console.error('Error deleting basic service:', error);
-      res.status(500).json({ message: 'Error deleting basic service.' });
+      console.error("Error deleting basic service:", error);
+      res.status(500).json({ message: "Error deleting basic service." });
     }
   }
 }
