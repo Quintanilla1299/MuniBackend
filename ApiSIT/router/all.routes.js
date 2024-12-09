@@ -12,6 +12,15 @@ import { archaeologicalRouter } from './archaeological_site.controller.routes.js
 import travelRouter from './travel_destination.routes.js'
 import { notificationRouter } from './notification.routes.js'
 
+import  ownerRouter  from './owner.routes.js';
+import  categoryRouter  from './category.routes.js';
+import  weatherRouter  from './weather.routes.js';
+import  establishmentRouter  from './establishment.routes.js';
+import  tourEventRouter  from './tour_event.routes.js';
+import basicServiceRouter from './basic_service.routes.js'; // Importación corregida
+import  securityServiceRouter from './security_service.routes.js';
+
+
 export const router = Router()
 
 router.get('/', (req, res) => {
@@ -31,3 +40,12 @@ router.use('/zona-riesgo', RiskZoneRouter)
 router.use('/sitio-arqueologico', archaeologicalRouter)
 router.use('/guia-viaje', travelRouter)
 router.use('/notificacion', notificationRouter)
+
+// Nuevas rutas
+router.use('/propietarios', ownerRouter);
+router.use('/categorias', categoryRouter);
+router.use('/clima', weatherRouter);
+router.use('/establecimientos', establishmentRouter);
+router.use('/eventos-tours', tourEventRouter);
+router.use('/servicios-basicos', basicServiceRouter); // Ruta corregida
+router.use('/servicios-seguridad', securityServiceRouter);

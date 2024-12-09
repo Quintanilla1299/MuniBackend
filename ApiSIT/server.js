@@ -7,6 +7,7 @@ import { sequelize } from './db/database.js'
 import './relationships.js'
 import { authMiddleware } from './auth.js'
 import { } from './jobs/refresh_token.job.js'
+import { } from './jobs/cronJobs.js'
 import publicRouter from './router/public.routes.js'
 import { Server } from 'socket.io'
 import http from 'http'
@@ -16,6 +17,7 @@ export const app = express()
 
 const server = http.createServer(app)
 const io = new Server(server, { cors: { origin: 'http://localhost:3000' } })
+let connectedUsers = 0;
 
 app.disable('x-powered-by')
 app.use(cors({
@@ -34,9 +36,13 @@ app.use('/sit', authMiddleware, router)
 // Conexión de socket
 io.on('connection', (socket) => {
   console.log('Cliente conectado:', socket.id)
+  connectedUsers++;
+  io.emit("connectedUsers", connectedUsers);
 
   socket.on('disconnect', () => {
     console.log('Cliente desconectado:', socket.id)
+    connectedUsers--;
+    io.emit("connectedUsers", connectedUsers);
   })
 })
 

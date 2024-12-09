@@ -12,6 +12,13 @@ import { EducationalResource } from './models/educational_resource.model.js'
 import { InfoLegalRegulatoria } from './models/info_legal_regulatoria.model.js'
 import { ArchaeologicalSite } from './models/archaeological_site.model.js'
 import { Notification } from './models/notification.model.js' // Asegúrate de importar el modelo Notification
+import { BasicService } from './models/basic_service.model.js'
+import { Weather } from './models/weather.model.js'
+import { SecurityService } from './models/security_service.model.js'
+import { Establishment } from './models/establishment.model.js'
+import { Category } from './models/category.model.js'
+import { Owner } from './models/owner.model.js'
+import { TourEvent } from './models/tour_event.model.js'
 
 // Definir asociaciones
 
@@ -33,12 +40,12 @@ Attraction.hasMany(Contact, {
   onDelete: 'CASCADE',
   scope: { entity_type: 'attraction' }
 })
-Attraction.hasMany(Image, {
-  foreignKey: 'entity_id',
-  allowNull: false,
-  onDelete: 'CASCADE',
-  scope: { entity_type: 'attraction' }
-})
+// Attraction.hasMany(Image, {
+//   foreignKey: 'entity_id',
+//   allowNull: false,
+//   onDelete: 'CASCADE',
+//   scope: { entity_type: 'attraction' }
+// })
 Attraction.hasOne(Accessibility, {
   foreignKey: 'attraction_id',
   onDelete: 'CASCADE',
@@ -49,12 +56,12 @@ Contact.belongsTo(Attraction, {
   allowNull: false,
   scope: { entity_type: 'attraction' }
 })
-Image.belongsTo(Attraction, {
-  foreignKey: 'entity_id',
-  allowNull: false,
-  constraints: false,
-  scope: { entity_type: 'attraction' }
-})
+// Image.belongsTo(Attraction, {
+//   foreignKey: 'entity_id',
+//   allowNull: false,
+//   constraints: false,
+//   scope: { entity_type: 'attraction' }
+// })
 Accessibility.belongsTo(Attraction, {
   foreignKey: 'attraction_id',
   scope: { entity_type: 'attraction' }
@@ -87,19 +94,19 @@ PasswordResetToken.belongsTo(User, {
 
 // transport
 
-Transport.hasMany(Image, {
-  foreignKey: 'entity_id',
-  allowNull: false,
-  onDelete: 'CASCADE',
-  scope: { entity_type: 'transport' }
-})
+// Transport.hasMany(Image, {
+//   foreignKey: 'entity_id',
+//   allowNull: false,
+//   onDelete: 'CASCADE',
+//   scope: { entity_type: 'transport' }
+// })
 
-Image.belongsTo(Transport, {
-  foreignKey: 'entity_id',
-  allowNull: false,
-  constraints: false,
-  scope: { entity_type: 'transport' }
-})
+// Image.belongsTo(Transport, {
+//   foreignKey: 'entity_id',
+//   allowNull: false,
+//   constraints: false,
+//   scope: { entity_type: 'transport' }
+// })
 
 EducationalResource.hasMany(DocumentFile, {
   foreignKey: 'entity_id',
@@ -121,12 +128,83 @@ DocumentFile.belongsTo(InfoLegalRegulatoria, {
   onDelete: 'CASCADE'
 })
 
-ArchaeologicalSite.hasMany(Image, {
-  foreignKey: 'entity_id',
-  onDelete: 'CASCADE'
-})
+// ArchaeologicalSite.hasMany(Image, {
+//   foreignKey: 'entity_id',
+//   onDelete: 'CASCADE'
+// })
 
-Image.belongsTo(ArchaeologicalSite, {
+// Image.belongsTo(ArchaeologicalSite, {
+//   foreignKey: 'entity_id',
+//   onDelete: 'CASCADE'
+// })
+
+//nuevas relaciones 
+Owner.hasMany(Establishment, {
+  foreignKey: 'ownerId',
+  as: 'owner'
+});
+Establishment.belongsTo(Owner, {
+  foreignKey: 'ownerId',
+  as: 'owner'
+});
+
+Category.hasMany(Establishment, {
+  foreignKey: 'categoryId',
+  as: 'category',
+});
+Establishment.belongsTo(Category, {
+  foreignKey: 'categoryId',
+  as: 'category',
+});
+
+// Establishment.hasMany(Image, {
+//   foreignKey: 'entity_id',
+//   allowNull: false,
+//   onDelete: 'CASCADE',
+//   scope: { entity_type: 'establishment' }
+// })
+
+// Image.belongsTo(Establishment, {
+//   foreignKey: 'entity_id',
+//   allowNull: false,
+//   constraints: false,
+//   scope: { entity_type: 'establishment' }
+// })
+
+// Polimorfismo en Image
+Image.belongsTo(Establishment, {
   foreignKey: 'entity_id',
-  onDelete: 'CASCADE'
-})
+  constraints: false, // No fuerza la clave foránea
+  scope: { entity_type: 'establishment' }, // Filtro para tipo de entidad
+});
+
+Image.belongsTo(Attraction, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'attraction' },
+});
+
+Image.belongsTo(Transport, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'transport' },
+});
+
+// Relación inversa
+Establishment.hasMany(Image, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'establishment' },
+});
+
+Attraction.hasMany(Image, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'attraction' },
+});
+
+Transport.hasMany(Image, {
+  foreignKey: 'entity_id',
+  constraints: false,
+  scope: { entity_type: 'transport' },
+});
