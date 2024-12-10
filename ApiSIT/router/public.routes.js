@@ -14,7 +14,7 @@ import SecurityServiceController from '../controllers/security_service.controlle
 import EstablishmentController from '../controllers/establishment.controller.js'
 import BasicServiceController from '../controllers/basic_service.controller.js'
 import TourEventController from '../controllers/tour_event.controller.js'
-
+import WeatherController from '../controllers/weather.controller.js'
 const publicRouter = Router()
 
 publicRouter.post('/sit/login', userController.login)
@@ -35,8 +35,7 @@ publicRouter.get('/sit/servicios-seguridad/listar', SecurityServiceController.fi
 publicRouter.get('/sit/establecimientos/listar', EstablishmentController.findAll);
 publicRouter.get('/sit/servicios-basicos/listar', BasicServiceController.findAll); // Obtener todos los servicios básicos
 publicRouter.get('/sit/eventos-tours/listar', TourEventController.findAll); // Obtener todos los eventos
-
-
+publicRouter.get('/sit/obtener-datos-clima', WeatherController.findAll); // Obtener todos los datos del clima
 
 //agrega las rutas despus de aca, es para probar
 
